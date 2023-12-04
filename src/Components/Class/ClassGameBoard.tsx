@@ -3,18 +3,24 @@ import "./styles/game-board.css";
 import { TFish } from "./ClassApp";
 
 type TClassGameBoardProps = {
-  setCorrectCount: () => void;
-  setIncorrectCount: () => void;
+  handleCount: (guess: string) => void;
   nextFishToName: TFish;
 };
 
-export class ClassGameBoard extends Component<TClassGameBoardProps> {
-  state = {
+type TClassGameBoardState = {
+  currentFishGuessInput: string;
+};
+
+export class ClassGameBoard extends Component<
+  TClassGameBoardProps,
+  TClassGameBoardState
+> {
+  state: TClassGameBoardState = {
     currentFishGuessInput: "",
   };
   render() {
     const { currentFishGuessInput } = this.state;
-    const { setCorrectCount, setIncorrectCount, nextFishToName } = this.props;
+    const { handleCount, nextFishToName } = this.props;
     return (
       <div id="game-board">
         <div id="fish-container">
@@ -25,6 +31,7 @@ export class ClassGameBoard extends Component<TClassGameBoardProps> {
           onSubmit={(e) => {
             e.preventDefault();
             this.setState({ currentFishGuessInput: "" });
+            handleCount(currentFishGuessInput);
           }}
         >
           <label htmlFor="fish-guess">What kind of fish is this?</label>
@@ -36,14 +43,7 @@ export class ClassGameBoard extends Component<TClassGameBoardProps> {
               this.setState({ currentFishGuessInput: e.target.value })
             }
           />
-          <input
-            type="submit"
-            onClick={() => {
-              currentFishGuessInput === nextFishToName.name
-                ? setCorrectCount()
-                : setIncorrectCount();
-            }}
-          />
+          <input type="submit" />
         </form>
       </div>
     );

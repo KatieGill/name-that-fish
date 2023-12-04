@@ -9,6 +9,11 @@ export type TFish = {
   url: string;
 };
 
+type TClassAppState = {
+  incorrectCount: number;
+  correctCount: number;
+};
+
 const initialFishes: TFish[] = [
   {
     name: "trout",
@@ -28,10 +33,10 @@ const initialFishes: TFish[] = [
   },
 ];
 
-const answersLeft = ["trout", "salmon", "tuna", "shark"];
+const answersLeft = initialFishes.map((fish) => fish.name);
 
-export class ClassApp extends Component {
-  state = {
+export class ClassApp extends Component<TClassAppState> {
+  state: TClassAppState = {
     incorrectCount: 0,
     correctCount: 0,
   };
@@ -39,10 +44,7 @@ export class ClassApp extends Component {
     const { incorrectCount, correctCount } = this.state;
     const index = correctCount + incorrectCount;
     const answersLeftArr = answersLeft.slice(index);
-    const nextFishToNameIndex = initialFishes
-      .map((fish) => fish.name)
-      .indexOf(answersLeftArr[0]);
-    const nextFishToName = initialFishes[nextFishToNameIndex];
+    const nextFishToName = initialFishes[index];
 
     return (
       <>
@@ -54,12 +56,19 @@ export class ClassApp extends Component {
               incorrectCount={incorrectCount}
             />
             <ClassGameBoard
-              setCorrectCount={() =>
+              /*setCorrectCount={() =>
                 this.setState({ correctCount: correctCount + 1 })
               }
               setIncorrectCount={() =>
                 this.setState({ incorrectCount: incorrectCount + 1 })
-              }
+              }*/
+              handleCount={(guess: string) => {
+                if (guess === nextFishToName.name) {
+                  this.setState({ correctCount: correctCount + 1 });
+                } else {
+                  this.setState({ incorrectCount: incorrectCount + 1 });
+                }
+              }}
               nextFishToName={nextFishToName}
             />
           </>

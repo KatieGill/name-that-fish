@@ -28,7 +28,7 @@ const initialFishes: TFish[] = [
   },
 ];
 
-const answersLeft = ["trout", "salmon", "tuna", "shark"];
+const answersLeft = initialFishes.map((fish) => fish.name);
 
 export function FunctionalApp() {
   const [correctCount, setCorrectCount] = useState(0);
@@ -36,10 +36,7 @@ export function FunctionalApp() {
 
   const index = correctCount + incorrectCount;
   const answersLeftArr = answersLeft.slice(index);
-  const nextFishToNameIndex = initialFishes
-    .map((fish) => fish.name)
-    .indexOf(answersLeftArr[0]);
-  const nextFishToName = initialFishes[nextFishToNameIndex];
+  const nextFishToName = initialFishes[index];
 
   return (
     <>
@@ -51,8 +48,13 @@ export function FunctionalApp() {
             incorrectCount={incorrectCount}
           />
           <FunctionalGameBoard
-            setCorrectCount={() => setCorrectCount(correctCount + 1)}
-            setIncorrectCount={() => setIncorrectCount(incorrectCount + 1)}
+            handleCount={(guess: string) => {
+              if (guess === nextFishToName.name) {
+                setCorrectCount(correctCount + 1);
+              } else {
+                setIncorrectCount(incorrectCount + 1);
+              }
+            }}
             nextFishToName={nextFishToName}
           />
         </>

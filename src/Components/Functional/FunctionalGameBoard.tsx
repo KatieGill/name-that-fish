@@ -3,12 +3,10 @@ import { useState } from "react";
 import { TFish } from "./FunctionalApp";
 
 export function FunctionalGameBoard({
-  setCorrectCount,
-  setIncorrectCount,
+  handleCount,
   nextFishToName,
 }: {
-  setCorrectCount: () => void;
-  setIncorrectCount: () => void;
+  handleCount: (guess: string) => void;
   nextFishToName: TFish;
 }) {
   const [currentFishGuessInput, setCurrentFishGuessInput] =
@@ -23,6 +21,7 @@ export function FunctionalGameBoard({
         onSubmit={(e) => {
           e.preventDefault();
           setCurrentFishGuessInput("");
+          handleCount(currentFishGuessInput);
         }}
       >
         <label htmlFor="fish-guess">What kind of fish is this?</label>
@@ -32,14 +31,7 @@ export function FunctionalGameBoard({
           value={currentFishGuessInput}
           onChange={(e) => setCurrentFishGuessInput(e.target.value)}
         />
-        <input
-          type="submit"
-          onClick={() => {
-            currentFishGuessInput === nextFishToName.name
-              ? setCorrectCount()
-              : setIncorrectCount();
-          }}
-        />
+        <input type="submit" />
       </form>
     </div>
   );
